@@ -1,0 +1,135 @@
+@config "../../tailwind.config.js";
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "PingFang SC", "PingFang TC", "Noto Sans SC", "Microsoft YaHei",
+    system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer utilities {
+  /* 1440 viewport -> content 1280 with 80px padding */
+  .gac-container {
+    @apply w-full mx-auto max-w-[1280px] px-5 md:px-10 desktop:px-[80px];
+  }
+
+  /* Spec: all hover micro-interactions */
+  .gac-interactive {
+    @apply transition-all duration-300 ease-quint-out;
+  }
+
+  /* Rainbow border feel (MagicUI-like) for black pill buttons */
+  .gac-rainbow-border {
+    background-size: 200% 200%;
+    animation: gac-rainbow-pan 6s linear infinite;
+  }
+
+  /* 1.5px animated rainbow border ring (center stroke) */
+  .gac-rainbow-ring-15 {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .gac-rainbow-ring-15::before {
+    content: "";
+    position: absolute;
+    /* Center stroke: half inside, half outside */
+    inset: -0.75px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: linear-gradient(
+      90deg,
+      #0a84ff 0%,
+      #6c63ff 25%,
+      #ff6ad5 50%,
+      #ffd66e 75%,
+      #2ee59d 100%
+    );
+    background-size: 200% 200%;
+    animation: gac-rainbow-pan 6s linear infinite;
+    /* Cut out center so only border shows */
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 1;
+    z-index: -1;
+    filter: saturate(1.12) blur(0.4px);
+  }
+
+  .gac-rainbow-ring-15::after {
+    content: "";
+    position: absolute;
+    inset: -12px;
+    border-radius: inherit;
+    background: linear-gradient(
+      90deg,
+      #0a84ff 0%,
+      #6c63ff 25%,
+      #ff6ad5 50%,
+      #ffd66e 75%,
+      #2ee59d 100%
+    );
+    background-size: 200% 200%;
+    animation: gac-rainbow-pan 6s linear infinite;
+    filter: blur(22px);
+    opacity: 0.22;
+    z-index: -2;
+  }
+}
+
+@keyframes gac-rainbow-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* 客户证言：横向无限循环滚动（hover 暂停） */
+@keyframes gac-testimonial-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@layer utilities {
+  .gac-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: gac-testimonial-marquee 50s linear infinite;
+  }
+
+  .gac-marquee-track:hover {
+    animation-play-state: paused;
+  }
+}
